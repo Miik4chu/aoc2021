@@ -25,6 +25,7 @@ pub fn main() {
 
     match day_num {
         1 => run_day!(day1, &input_str),
+        2 => run_day!(day2, &input_str),
         _ => println!("Invalid day number: {}", day_num),
     }
 }
