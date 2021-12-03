@@ -1,40 +1,47 @@
-pub fn parse_input(input: &str) -> Vec<&str> {
-    input.lines().collect()
+pub fn parse_input(input: &str) -> Vec<(&str, u32)> {
+    input
+        .lines()
+        .map(|line: &str| {
+            let data: Vec<&str> = line.split_whitespace().collect();
+            (data[0], data[1].parse::<u32>().unwrap())
+        })
+        .collect()
 }
 
-pub fn part1(input: &str) -> i32 {
-    let mut x: i32 = 0;
-    let mut y: i32 = 0;
-    let lines = parse_input(input).into_iter();
+pub fn part1(input: &str) -> u32 {
+    let mut x: u32 = 0;
+    let mut y: u32 = 0;
+
+    let lines: Vec<(&str, u32)> = parse_input(input);
+
     for line in lines {
-        let mut iter = line.split_whitespace();
-        match iter.next().unwrap() {
-            "up" => y -= iter.next().unwrap().parse::<i32>().unwrap(),
-            "down" => y += iter.next().unwrap().parse::<i32>().unwrap(),
-            "forward" => x += iter.next().unwrap().parse::<i32>().unwrap(),
-            _ => {}
+        match line {
+            ("up", value) => y -= value,
+            ("down", value) => y += value,
+            ("forward", value) => x += value,
+            _ => println!("Invalid line"),
         }
     }
 
     x * y
 }
 
-pub fn part2(input: &str) -> i32 {
-    let mut x: i32 = 0;
-    let mut y: i32 = 0;
-    let mut aim: i32 = 0;
-    let lines = parse_input(input).into_iter();
+pub fn part2(input: &str) -> u32 {
+    let mut x: u32 = 0;
+    let mut y: u32 = 0;
+    let mut aim: u32 = 0;
+
+    let lines: Vec<(&str, u32)> = parse_input(input);
+
     for line in lines {
-        let mut iter = line.split_whitespace();
-        match iter.next().unwrap() {
-            "up" => aim -= iter.next().unwrap().parse::<i32>().unwrap(),
-            "down" => aim += iter.next().unwrap().parse::<i32>().unwrap(),
-            "forward" => {
-                let n: i32 = iter.next().unwrap().parse::<i32>().unwrap();
-                x += n;
-                y += n * aim;
+        match line {
+            ("up", value) => aim -= value,
+            ("down", value) => aim += value,
+            ("forward", value) => {
+                x += value;
+                y += value * aim;
             }
-            _ => {}
+            _ => println!("Invalid line"),
         }
     }
 
