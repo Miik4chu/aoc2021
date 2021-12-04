@@ -26,7 +26,7 @@ pub fn part2(input: &str) -> u32 {
     let length = numbers.first().unwrap().len();
 
     let mut oxygen_ratings: Vec<Vec<u32>> = numbers.clone();
-    let mut co2_ratings: Vec<Vec<u32>> = numbers.clone();
+    let mut co2_ratings: Vec<Vec<u32>> = numbers;
 
     for i in 0..length {
         let (zero_count, one_count) = get_count(&oxygen_ratings, i);
@@ -58,11 +58,11 @@ pub fn part2(input: &str) -> u32 {
     convert_bits_to_int(oxygen_rating) * convert_bits_to_int(co2_rating)
 }
 
-pub fn get_count(input: &Vec<Vec<u32>>, index: usize) -> (usize, usize) {
+pub fn get_count(input: &[Vec<u32>], index: usize) -> (usize, usize) {
     let zero_count: usize = input
-        .clone()
+        .to_owned()
         .into_iter()
-        .filter(|line| line.get(index).unwrap().clone() == 0)
+        .filter(|line| *line.get(index).unwrap() == 0)
         .count();
     let one_count: usize = input.len() - zero_count;
 
