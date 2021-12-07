@@ -14,15 +14,11 @@ pub struct BingoGame {
 
 impl Board {
     fn mark(&mut self, number: u32) -> bool {
-        for row in &mut self.rows {
-            for value in row.iter_mut() {
-                if let Some(x) = value {
-                    if &number == x {
-                        *value = None;
-                    }
-                };
-            }
-        }
+        self.rows
+            .iter_mut()
+            .flatten()
+            .filter(|x| *x == &Some(number))
+            .for_each(|x| *x = None);
 
         self.won = self.has_won_by_row() || self.has_won_by_column();
 
@@ -34,9 +30,8 @@ impl Board {
     }
 
     fn has_won_by_column(&self) -> bool {
-        let mut columns = (0..5).map(|x| -> Vec<Option<u32>> {
-            (0..5).map(|y| -> Option<u32> { self.rows[y][x] }).collect()
-        });
+        let mut columns =
+            (0..5).map(|x| -> Vec<Option<u32>> { (0..5).map(|y| self.rows[y][x]).collect() });
 
         columns.any(|y| y.iter().all(|x| x.is_none()))
     }
@@ -53,9 +48,9 @@ impl FromStr for Board {
     type Err = ParseIntError;
 
     fn from_str(input: &str) -> Result<Self, Self::Err> {
-        let rows: Vec<Vec<Option<u32>>> = input
+        let rows = input
             .lines()
-            .map(|x| -> Vec<Option<u32>> {
+            .map(|x| {
                 x.split_whitespace()
                     .map(|x| Some(x.parse().unwrap()))
                     .collect()
@@ -68,12 +63,12 @@ impl FromStr for Board {
 
 pub fn parse_input(input: &str) -> BingoGame {
     let lines: Vec<&str> = input.split("\n\n").collect();
-    let numbers: Vec<u32> = lines[0]
+    let numbers = lines[0]
         .split(',')
-        .map(|s: &str| s.trim().parse().unwrap())
+        .map(|s| s.trim().parse().unwrap())
         .collect();
 
-    let boards: Vec<Board> = lines.iter().skip(1).map(|x| x.parse().unwrap()).collect();
+    let boards = lines.iter().skip(1).map(|x| x.parse().unwrap()).collect();
 
     BingoGame { numbers, boards }
 }
