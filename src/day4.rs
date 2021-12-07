@@ -44,7 +44,7 @@ impl Board {
     fn compute_score(&self) -> u32 {
         self.rows
             .iter()
-            .map(|row| -> u32 { row.iter().filter(|x| x.is_some()).map(|x| x.unwrap()).sum() })
+            .map(|row| -> u32 { row.iter().flatten().sum() })
             .sum()
     }
 }
