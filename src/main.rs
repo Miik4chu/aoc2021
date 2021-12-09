@@ -28,6 +28,7 @@ pub fn main() {
         2 => run_day!(day2, input_str),
         3 => run_day!(day3, input_str),
         4 => run_day!(day4, input_str),
+        5 => run_day!(day5, input_str),
         _ => println!("Invalid day number: {}", day_num),
     }
 }
